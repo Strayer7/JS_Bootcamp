@@ -1,7 +1,7 @@
 class Ship{
   constructor(name, length, orientation)
   {
-    if (orientation !== 0 && orientation !== 1) {
+    if (orientation !== 0 && orientation !== 1) { // 0 - горизонтальная, 1 - вертикальная
       throw new Error('Неверный ввод ориентации'); 
   }
     this._name = name;
@@ -123,5 +123,32 @@ class Board{
   {
     ship.setX(x);
     ship.setY(y)
+    if (ship.orientation === 0)
+    {
+        for (let i = ship.xShipPosition; i < ship.length; i++)
+        {
+          grid[y][i] = 1;
+        }
+    }
+    if (ship.orientation === 1)
+    {
+      for (let i = ship.xShipPosition; i < 1; i++)
+      {
+        for (let j = ship.yShipPosition; j < ship.length;j++ )
+        {
+          grid[j][i] = 1;
+        }
+      }
+    }
+  }
+  display()
+  {
+    
   }
 }
+
+
+let test = new Ship("Тест",3,0)
+let board = new Board(5)
+
+board.placeShip(test,1,1)
