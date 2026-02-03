@@ -1,79 +1,84 @@
-class Ship {
-    constructor(name, length, pos, x,y)
-    {
-        this._name = name;
-        this._length = length;
-        this._pos = pos;
-        this._hits = Array(length).fill(false);
-        this._startPosition = {x,y};
-    }
-
-    get name()
-    {
-        return this._name;
-    }
-
-    set name(name)
-    {
-        this._name = name;
-    }
-
-    get length()
-    {
-        return this._length;
-    }
-    set length(length)
-    {
-        this._length = length;
-    }
-    get pos()
-    {
-        return this._pos;
-    }
-    set pos(pos)
-    {
-        this._pos = pos;
-    }
-    get startPosition()
-    {
-        return this._startPosition;
-    }
-    set startPosition(value) { 
-        this._startPosition.x = value.x;
-        this._startPosition.y = value.y;
-    }
-
-    hit(index)
-    {
-        this._hits[index] = true;
-    }
-
-    isSunk(shipHits)
-    {  
-        let check = true;
-        for(let i = 0; i < shipHits.length; i++)
-        {
-            if(shipHits[i] == false)
-            {
-                check = false;
-                break;
-            }
-        }
-        return check;
-    }
-
+class Ship{
+  constructor(name, length, orientation)
+  {
+    if (orientation !== 0 && orientation !== 1) {
+      throw new Error('Неверный ввод ориентации'); 
+  }
+    this._name = name;
+    this._length = length;
+    this._orientation = orientation
+    this._hits = Array(this.length).fill(false);
+    this._startPosition = { x: 0, y: 0 };
+    
 }
-//let Shipname = prompt("NAME");
-//let length = Number(prompt("LENGTH"));
-//let pos =  Number(prompt("Pos"));
-//let x =  Number(prompt("x"));
-//let y = Number(prompt("y"));
+get name()
+{
+  return this._name;
+}
 
-let ShipName = "Ship";
-let length = 2;
-let pos = 1;
+set name(newName)
+{
+  this._name = newName;
+}
 
-let test = new Ship(ShipName, length, pos);
-test.hit(0);
-test.hit(1);
-console.log(`${test.name}, ${test.length}, ${test.pos}, ${test.isSunk()}`);
+get length()
+{
+  return this._length;
+}
+
+set length(newLength)
+{
+  this._length = newLength
+}
+
+get orientation()
+{
+  return this._orientation;
+}
+
+set orientation(newOrientation)
+{
+  this._orientation = newOrientation;
+}
+get hits()
+    {
+      return this._hits;
+    }
+get startPosition()
+{
+  return this._startPosition;
+}
+setPosition(x, y) {
+  this._startPosition = { x, y };
+}
+
+setX(x) {
+  this._startPosition.x = x;
+}
+
+setY(y) {
+  this._startPosition.y = y;
+}
+hit(index)
+{
+  this._hits[index] = true;
+}
+isSunk()
+{
+  return !this._hits.includes(false);
+}
+get info()
+{
+   return `${this._name}, ${this._length}, ${this._orientation}, ${this.isSunk()}`;
+}
+}
+
+// let sName = prompt("Введи имя");
+// let sLength = Number(prompt("Введи длину"));
+// let sOrientation = Number(prompt("Введи ориентацию (0 = Горизонтальная, 1 = Вертикальная)"))
+
+
+// let newShip = new Ship(sName,sLength,sOrientation);
+// newShip.hit(0)
+// newShip.hit(1)
+// alert(newShip.info);
