@@ -121,34 +121,48 @@ class Board{
 
   placeShip(ship,x,y)
   {
-    ship.setX(x);
-    ship.setY(y)
-    if (ship.orientation === 0)
-    {
-        for (let i = ship.xShipPosition; i < ship.length; i++)
-        {
-          grid[y][i] = 1;
-        }
-    }
-    if (ship.orientation === 1)
-    {
-      for (let i = ship.xShipPosition; i < 1; i++)
-      {
-        for (let j = ship.yShipPosition; j < ship.length;j++ )
-        {
-          grid[j][i] = 1;
-        }
+    ship.setPosition(x, y); //переписать
+    this._ships.push(ship);
+  }
+  display() {
+  for (let y = 0; y < this._size; y++) {
+    let line = '';
+    for (let x = 0; x < this._size; x++) {
+      const cell = this._grid[y][x];
+      if (cell === null) {
+        line += 'o ';
+      } else if (cell === 1) {
+        line += 's ';
+      } else {
+        line += 'x '; 
       }
     }
+    console.log(line.trim());
   }
-  display()
+}
+  findAvaliableCells()
   {
-    
+    let arr = [];
+    for (let y = 0; y < this._size; y++) {
+      for (let x = 0; x < this._size; x++) {
+        if (this._grid[y][x] === null)
+        {
+          arr.push({"x":x,"y":y})
+        }
   }
+}
+  return arr;
+}
+  recieveAttack(x,y)
+{
+//дописать
+}
 }
 
 
-let test = new Ship("Тест",3,0)
+let test = new Ship("Тест",3,1)
 let board = new Board(5)
 
-board.placeShip(test,1,1)
+board.placeShip(test,0,0)
+
+console.log(board.findAvaliableCells())
