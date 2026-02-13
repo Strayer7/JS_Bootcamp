@@ -119,10 +119,10 @@ class Board{
     return this._grid;
   }
 
-  pplaceShip(ship, x, y) {
+  placeShip(ship, x, y) {
         if (ship._orientation === 0) {
             if (x >= this._size || x + ship._length > this._size || x < 0) {
-                throw new Error("Корабль вне границы");
+                throw new Error("Out of bounds");
             }
             for (let i = 0; i < ship.length; i++) {
                 if (this._grid[y][x + i] !== null) {
@@ -134,7 +134,7 @@ class Board{
             }
         } else {
             if (y >= this._size || y + ship._length > this._size || y < 0) {
-                throw new Error("Корабль вне границы");
+                throw new Error("Out of bounds");
             }
             for (let i = 0; i < ship.length; i++) {
                 if (this._grid[y + i][x] !== null) {
@@ -202,10 +202,59 @@ class Board{
 }
 }
 
-let boardSize = parceInt(prompt("Введи размер доски"));
-let board = new Board(boardSize);
-let ship = new Ship("ShipTest", 3, 0)
-board.placeShip(ship,0,0)
+class Player {
+  constructor(name,boardSize)
+  {
+    this._name = name;
+    this._boardSize = boardSize;
+    this._board = new Board(boardSize)
+  }
 
-console.log(`${board.size}, ${board.recieveAttack(1,0)}`)
+  get name()
+  {
+    return this._name;
+  }
 
+  set name(name)
+  {
+    this._name = name;
+  }
+
+  get boardSize()
+  {
+    return this._boardSize;
+  }
+
+  set boardSize(size)
+  {
+    this._boardSize = size;
+  }
+
+  get board()
+  {
+    return this._board;
+  }
+  placeShip(shipName,length, isVertical, startPosition)
+  {
+    const ship = new Ship(shipName, length,isVertical)
+    this._board.placeShip(ship,startPosition.x,startPosition.y)
+  }
+  takeTurn(opponent)
+  {
+    let x = parseInt(prompt("Введите удар по х"));
+    let y = parseInt(prompt("Введите удар по y"))
+    let result = {"x" : x,
+                  "y" : y,
+                  "Оппонент" : opponent
+    }
+    return result;
+  }
+
+}
+
+let playerName = prompt("Введите имя оппонента");
+let boardSize = Number(prompt("Введите длину доски"));
+
+let player = new Player (playerName,boardSize)
+
+console.log(`"${player.name}", ${player.boardSize}`)

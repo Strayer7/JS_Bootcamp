@@ -1,7 +1,7 @@
 class Ship{
   constructor(name, length, orientation)
   {
-    if (orientation !== 0 && orientation !== 1) {
+    if (orientation !== 0 && orientation !== 1) { // 0 - горизонтальная, 1 - вертикальная
       throw new Error('Неверный ввод ориентации'); 
   }
     this._name = name;
@@ -73,12 +73,12 @@ get info()
 }
 }
 
-// let sName = prompt("Введи имя");
-// let sLength = Number(prompt("Введи длину"));
-// let sOrientation = Number(prompt("Введи ориентацию (0 = Горизонтальная, 1 = Вертикальная)"))
+let sName = prompt("Введи имя");
+let sLength = Number(prompt("Введи длину"));
+let sOrientation = Number(prompt("Введи ориентацию (0 = Горизонтальная, 1 = Вертикальная)"))
 
 
-// let newShip = new Ship(sName,sLength,sOrientation);
-// newShip.hit(0)
-// newShip.hit(1)
-// alert(newShip.info);
+let newShip = new Ship(sName,sLength,sOrientation);
+newShip.hit(0)
+newShip.hit(1)
+alert(newShip.info);
