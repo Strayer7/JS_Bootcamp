@@ -252,7 +252,7 @@ class Player {
 
 }
 
-let playerName = prompt("Введите имя оппонента");
+let playerName = prompt("Введите своё имя");
 let boardSize = Number(prompt("Введите длину доски"));
 
 let player = new Player (playerName,boardSize)

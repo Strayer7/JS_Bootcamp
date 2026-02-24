@@ -221,8 +221,8 @@ class Player {
     }
 
     takeTurn(opponent) {
-        let x = parseInt(prompt("Введите удар по x"));
-        let y = parseInt(prompt("Введите удар по y"));
+        let x = parseInt(prompt(`Игрок ${this.name} вводит удар по X`));
+        let y = parseInt(prompt(`Игрок ${this.name} вводит удар по Y`));
         return {
             x,
             y,
@@ -230,8 +230,6 @@ class Player {
         };
     }
 }
-
-
 
 class HumanPlayer extends Player {
     constructor(name, boardSize) {
@@ -267,29 +265,29 @@ class AIPlayer extends Player {
 
 
     placeShip(maxShipLength, maxShipCount) {
-        //for (let i = 0; i < maxShipCount; i++) {
+        for (let i = 0; i < maxShipCount; i++) {
             const shipName = `Ai Ship ${this.randomNumberBetween(0, 9)}`;
             const length = this.randomNumberBetween(1, maxShipLength);
             const isVertical = this.randomNumberBetween(0, 1);
             const ship = new Ship(shipName, length, isVertical);
 
-            // while (true) {
-            //     const emptyCells = this.board.findAvaliableCells();
-            //     if (emptyCells.length === 0) break;
+            while (true) {
+                const emptyCells = this.board.findAvaliableCells();
+                if (emptyCells.length === 0) break;
 
-            //     const index = this.randomNumberBetween(0, emptyCells.length - 1);
-            //     const {
-            //         x,
-            //         y
-            //     } = emptyCells[index];
+                const index = this.randomNumberBetween(0, emptyCells.length - 1);
+                const {
+                    x,
+                    y
+                } = emptyCells[index];
 
-            //     try {
-                    this.board.placeShip(ship,0,0); //x, y);
-                //     break;
-                // } catch (e) {}
+                try {
+                    this.board.placeShip(ship,x,y);
+                    break;
+                } catch (e) {}
             }
-        //}
-//    }
+        }
+   }
     findNotAttackedCells() {
         let arr = [];
         for (let y = 0; y < this.boardSize; y++) {
@@ -327,7 +325,8 @@ class App {
         this._boardSize = boardSize;
         this._shipMaxLength = shipMaxLength;
         this._maxShipCount = maxShipCount;
-        this._firstPlayer = new Player("Max", boardSize);
+        this._firstPlayer = null;
+        this._secondPlayer = null;
     }
 
     get boardSize() {
@@ -365,8 +364,8 @@ class App {
                 alert("Ориентация должна быть 0 или 1!");
                 continue;
             }
-            let shipX = Number(prompt("Координата X:"));
-            let shipY = Number(prompt("Координата Y:"));
+            let shipX = Number(prompt("Расстановка кораблей: Координата X:"));
+            let shipY = Number(prompt("Расстановка кораблей: Координата Y:"));
 
             try {
                 player.placeShip(`${shipName} ${i + 1}`, shipLength, shipOrientation, {
@@ -379,12 +378,21 @@ class App {
             }
         }
     }
+    delay(ms)
+    {
+        return new Promise(resolve => setTimeout(resolve,ms));
+    }
 
-    run() {
+    async run() {
+
+        let name1 = prompt("Введите имя первого игрока:");
+        this._firstPlayer = new HumanPlayer(name1, this._boardSize);
+
         let whichOpponent = Number(prompt("Выбери оппонента: 0 - компьютер, 1 - человек"));
         if (whichOpponent) {
             this.shipArrangement(this._firstPlayer, this._maxShipCount, this._shipMaxLength);
-            this._secondPlayer = new Player("Alex", this._boardSize);
+             let name2 = prompt("Введите имя второго игрока:");
+            this._secondPlayer = new HumanPlayer(name2, this._boardSize);
             this.shipArrangement(this._secondPlayer, this._maxShipCount, this._shipMaxLength);
         } else if (!whichOpponent) {
             this.shipArrangement(this._firstPlayer, this._maxShipCount, this._shipMaxLength);
@@ -396,9 +404,10 @@ class App {
         let opponent = this._secondPlayer;
 
         while (true) {
-            let attack = currentPlayer.takeTurn(opponent);
+            await this.delay(1000);
+            let attack = currentPlayer.takeTurn(opponent);        
             opponent.board.receiveAttack(attack.x, attack.y);
-
+            console.log(`${currentPlayer.name} (${attack.x},${attack.y})`)
             if (opponent.board.areAllShipsSunk()) {
                 console.log(`${currentPlayer.name} `);
                 break;
